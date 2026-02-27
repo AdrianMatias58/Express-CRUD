@@ -3,6 +3,7 @@ import RutasCarga from './routes/carga.route.js'
 import RutasVehiculo from './routes/vehiculos.routes.js'
 const app = express()
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
 app.use(RutasCarga)
 app.use(RutasVehiculo)
 

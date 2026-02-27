@@ -1,8 +1,9 @@
-class Vehiculo {
-    constructor(id_vehiculo, modelo,nro_identificacion){
-        this.id= id_vehiculo
-        this.modelo = modelo
-        this.nro_identificacion = nro_identificacion
+ export default class Vehiculo {
+    constructor(data){
+        this.id= data.id_vehiculo
+        this.modelo = data.modelo
+        this.nro_identificacion = data.nro_identificacion
+        this.estado = data.estado
     }
 
 }
