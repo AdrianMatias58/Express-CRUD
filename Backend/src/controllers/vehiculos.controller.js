@@ -19,7 +19,7 @@ ControllVehiculo.createVehiculos = async (req, res) => {
     res.status(500).json({ error: "Error al obtener los vehiculos" });
   }
 };
-//por deifnir
+
 ControllVehiculo.updateEstadoVehiculo = async (req, res) => {
   try {
     const { id } = req.params;
@@ -53,5 +53,15 @@ ControllVehiculo.deleteVehiculos = async (req, res) => {
     res.status(500).json({ error: "Error al obtener los vehiculos" });
   }
 };
+ControllVehiculo.getVehiculosDisponible = async (req, res) => {
+    try {
+        const vehiculos = await VehiculoR.VehiculosDisponible();
+        res.json(vehiculos);
+    } catch (error) {
+        console.error("ERROR REAL:", error);
+        res.status(500).json({ error: "Error al obtener los vehiculos disponibles" });
+    }
+}
+
 
 export default ControllVehiculo;

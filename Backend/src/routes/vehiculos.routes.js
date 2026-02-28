@@ -4,6 +4,7 @@ const route = Router()
 //crear vehiculo
 route.get('/vehiculo', CtrllVehiculo.getVehiculos)
 //agregar vehiculo
+route.get('/vehiculo/disponible', CtrllVehiculo.getVehiculosDisponible)
 route.post('/vehiculo', CtrllVehiculo.createVehiculos)
 //actulizar evhiculo
 //route.put('/vehiculo', CtrllVehiculo.updateVehiculos)

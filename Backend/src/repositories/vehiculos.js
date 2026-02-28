@@ -17,9 +17,17 @@ export default class VehiculoRepository extends Base {
                 return result
             }
         }catch(error){
-            console.error("DETALLE DEL ERROR SQL:", error.message);
             throw error;
         }
-
+    }
+    async VehiculosDisponible(){
+        try{
+            const [rows] = await this.pool.query(
+                `SELECT * FROM ${this.table} WHERE estado = 1`
+            );
+            return rows.map(row => new this.model(row));
+        }catch(error){
+            throw error;
+        }
     }
 }
