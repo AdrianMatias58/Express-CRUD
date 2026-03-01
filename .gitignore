@@ -1,11 +1,14 @@
-# .gitignore — Reglas para la carpeta Backend y para evitar archivos grandes
-# Ignora dependencias de Node
-Backend/node_modules/
+# .gitignore — Reglas para Backend y Frontend
 
+# ========================
+# BACKEND
+# ========================
+
+# Dependencias
+Backend/node_modules/
 
 # Variables de entorno
 Backend/.env
-
 
 # Logs
 Backend/logs/
@@ -18,18 +21,43 @@ Backend/dist/
 Backend/build/
 Backend/.next/
 
-# Archivos del sistema y editores
+# ========================
+# FRONTEND (Vite + Vue)
+# ========================
+
+# Dependencias
+Frontend/node_modules/
+
+# Variables de entorno
+Frontend/.env
+Frontend/.env.local
+Frontend/.env.*.local
+
+# Build de producción
+Frontend/dist/
+Frontend/build/
+
+# Cache de Vite
+Frontend/.vite/
+
+# ========================
+# ARCHIVOS DEL SISTEMA Y EDITORES
+# ========================
 .DS_Store
 Thumbs.db
 .vscode/
 .idea/
 
-# Bases de datos y caches (archivos binarios grandes)
+# ========================
+# BASES DE DATOS
+# ========================
 *.sqlite
 *.sqlite3
 *.db
 
-# Archivos grandes y binarios (medios, paquetes, instalables)
+# ========================
+# ARCHIVOS GRANDES Y BINARIOS
+# ========================
 *.zip
 *.tar.gz
 *.tgz
@@ -50,5 +78,5 @@ Thumbs.db
 # Backups
 *.bak
 
-# Si quieres ignorar dumps SQL (por ejemplo, copias grandes), descomenta la siguiente línea
+# Dumps SQL (descomenta si es necesario)
 # *.sql
