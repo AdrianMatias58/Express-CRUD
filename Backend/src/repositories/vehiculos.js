@@ -10,10 +10,9 @@ export default class VehiculoRepository extends Base {
             //verificar existencia del vehiculo
             const vehiculo = await this.getById(id);
             if (vehiculo) {
-                const actulizarestado = (estado === true) ? 1 : 0;
                 const [result] = await this.pool.query(
                 `UPDATE ${this.table} SET estado = ? WHERE ${this.primaryKey} = ?`,
-                [actulizarestado, id]);
+                [estado, id]);
                 return result
             }
         }catch(error){
@@ -26,6 +25,14 @@ export default class VehiculoRepository extends Base {
                 `SELECT * FROM ${this.table} WHERE estado = 1`
             );
             return rows.map(row => new this.model(row));
+        }catch(error){
+            throw error;
+        }
+    }
+    async delete(id){
+        try{
+            await this.pool.query(`UPDATE carga SET id_vehiculo = NULL WHERE id_vehiculo = ?`, [id]);
+            return await super.delete(id);
         }catch(error){
             throw error;
         }

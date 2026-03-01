@@ -33,6 +33,7 @@ export default class BaseRepository {
             `DELETE FROM ${this.table} WHERE ${this.primaryKey} = ?`, 
             [id]
         );
+        return result;
     }
 }
 

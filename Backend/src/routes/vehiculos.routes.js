@@ -2,15 +2,14 @@ import {Router} from 'express'
 import CtrllVehiculo from '../controllers/vehiculos.controller.js'
 const route = Router()
 //crear vehiculo
-route.get('/vehiculo', CtrllVehiculo.getVehiculos)
+route.get('/api/vehiculo', CtrllVehiculo.getVehiculos)
+//Obtener vehiculos disponibles
+route.get('/api/vehiculo/disponible', CtrllVehiculo.getVehiculosDisponible)
 //agregar vehiculo
-route.get('/vehiculo/disponible', CtrllVehiculo.getVehiculosDisponible)
-route.post('/vehiculo', CtrllVehiculo.createVehiculos)
-//actulizar evhiculo
-//route.put('/vehiculo', CtrllVehiculo.updateVehiculos)
-//eliminar vehiculo 
-route.delete('/vehiculo/:id', CtrllVehiculo.deleteVehiculos)
-
-route.patch('/vehiculo/estado/:id', CtrllVehiculo.updateEstadoVehiculo);
+route.post('/api/vehiculo', CtrllVehiculo.createVehiculos)
+//Eliminar vehiculo
+route.delete('/api/vehiculo/:id', CtrllVehiculo.deleteVehiculos)
+//actulizar estado del vehiculo
+route.patch('/api/vehiculo/estado/:id', CtrllVehiculo.updateEstadoVehiculo);
 
 export default route

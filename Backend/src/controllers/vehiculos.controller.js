@@ -45,11 +45,12 @@ ControllVehiculo.deleteVehiculos = async (req, res) => {
   try {
     const { id } = req.params;
     const vehiculos = await VehiculoR.delete(id);
-    res.json({ message: "Vehículo eliminado correctamente" });
-    if (!eliminado) {
+     if (vehiculos.affectedRows === 0) { 
       return res.status(404).json({ error: "Vehículo no encontrado" });
     }
-  } catch {
+    res.json({ message: "Vehículo eliminado correctamente" });
+  } catch (error) {
+    console.error("ERROR REAL:", error);
     res.status(500).json({ error: "Error al obtener los vehiculos" });
   }
 };
