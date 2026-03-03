@@ -5,6 +5,11 @@ export default class VehiculoRepository extends Base {
     constructor() {
         super('vehiculo', cnPool, Vehiculo, 'id_vehiculo');
     }
+    async getAll(){ 
+        const [row] = await this.pool.query(`CALL P_V_DATOS_GENERALS()`)
+        return row[0]
+    }
+    
     async updateEstado(id, estado) {
         try{
             //verificar existencia del vehiculo
@@ -22,19 +27,20 @@ export default class VehiculoRepository extends Base {
     async VehiculosDisponible(){
         try{
             const [rows] = await this.pool.query(
-                `SELECT * FROM ${this.table} WHERE estado = 1`
+                `CALL P_V_DISPONIBLE`
             );
-            return rows.map(row => new this.model(row));
+            return rows;
         }catch(error){
             throw error;
         }
     }
     async delete(id){
         try{
-            await this.pool.query(`UPDATE carga SET id_vehiculo = NULL WHERE id_vehiculo = ?`, [id]);
-            return await super.delete(id);
+            const [res] = await this.pool.query(`CALL P_ELIMINAR_VEHICULO_COMPLETO (?)`, [id]);
+            return [res]
         }catch(error){
             throw error;
         }
     }
+    
 }

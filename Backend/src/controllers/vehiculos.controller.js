@@ -45,19 +45,19 @@ ControllVehiculo.deleteVehiculos = async (req, res) => {
   try {
     const { id } = req.params;
     const vehiculos = await VehiculoR.delete(id);
-     if (vehiculos.affectedRows === 0) { 
+     if (vehiculos.affectedRows<1) { 
       return res.status(404).json({ error: "Vehículo no encontrado" });
     }
     res.json({ message: "Vehículo eliminado correctamente" });
   } catch (error) {
     console.error("ERROR REAL:", error);
-    res.status(500).json({ error: "Error al obtener los vehiculos" });
+    res.status(500).json({ error: "Error al eliminar veiculo" });
   }
 };
 ControllVehiculo.getVehiculosDisponible = async (req, res) => {
     try {
         const vehiculos = await VehiculoR.VehiculosDisponible();
-        res.json(vehiculos);
+        res.json(vehiculos[0]);
     } catch (error) {
         console.error("ERROR REAL:", error);
         res.status(500).json({ error: "Error al obtener los vehiculos disponibles" });

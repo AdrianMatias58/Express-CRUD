@@ -1,74 +1,90 @@
-CREATE DATABASE IF NOT EXISTS dbSystemaEntrega;
--- Seleccionar la base de datos para trabajar
-USE dbSystemaEntrega;
--- 1. Tabla de Categoría
-DROP TABLE IF EXISTS categoria;
 CREATE TABLE categoria (
-  id_categoria int NOT NULL AUTO_INCREMENT,
+  id_categoria int(11) NOT NULL,
   nombre char(100) NOT NULL,
-  created_at timestamp DEFAULT CURRENT_TIMESTAMP,
-  updated_at timestamp NULL,
+  created_at timestamp DEFAULT current_timestamp(),
+  updated_at timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (id_categoria)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 2. Tabla de Vehículo
-DROP TABLE IF EXISTS vehiculo;
+INSERT  categoria (id_categoria, nombre) VALUES 
+(1,'Terrestre'),(2,'Marítimo'),(3,'Aéreo'),
+(4,'Estándar'),(5,'Frágil'),(6,'Extra Frágil');
+
 CREATE TABLE vehiculo (
-  id_vehiculo int NOT NULL AUTO_INCREMENT,
+  id_vehiculo int(11) NOT NULL,
   modelo char(100) NOT NULL,
-  nro_identificacion char(17) NOT NULL, 
-  estado char(20) NOT NULL, 
-  id_categoria int NOT NULL,
-  created_at timestamp DEFAULT CURRENT_TIMESTAMP,
-  updated_at timestamp NULL,
+  nro_identificacion char(17) NOT NULL,
+  estado char(20) NOT NULL DEFAULT 'Disponible',
+  id_categoria int(11) NOT NULL,
+  created_at timestamp NOT NULL DEFAULT current_timestamp(),
+  updated_at timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (id_vehiculo),
-  UNIQUE (nro_identificacion),
+  UNIQUE KEY nro_identificacion (nro_identificacion),
+  KEY fk_vehiculo_categoria (id_categoria),
   CONSTRAINT fk_vehiculo_categoria FOREIGN KEY (id_categoria) REFERENCES categoria (id_categoria)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 3. Tabla de Paquete
-DROP TABLE IF EXISTS paquete;
 CREATE TABLE paquete (
-  id_paquete int NOT NULL AUTO_INCREMENT,
+  id_paquete int(11) NOT NULL,
   peso char(50) NOT NULL,
-  destino char(100),
-  contenido char(225),
+  destino char(100) DEFAULT NULL,
+  contenido char(225) DEFAULT NULL,
   estado char(15) NOT NULL,
-  id_vehiculo int,
-  id_categoria int NOT NULL,
-  created_at timestamp DEFAULT CURRENT_TIMESTAMP,
-  updated_at timestamp NULL,
+  id_vehiculo int(11) DEFAULT NULL,
+  id_categoria int(11) NOT NULL,
+  created_at timestamp NOT NULL DEFAULT current_timestamp(),
+  updated_at timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (id_paquete),
-  CONSTRAINT fk_paquete_vehiculo FOREIGN KEY (id_vehiculo) REFERENCES vehiculo (id_vehiculo),
-  CONSTRAINT fk_paquete_categoria FOREIGN KEY (id_categoria) REFERENCES categoria (id_categoria)
-);
--- =============================================
--- 1. INSERT PARA LA TABLA: categoria
--- =============================================
-INSERT INTO categoria (nombre) VALUES 
-('Terrestre'),    -- ID 1
-('Marítimo'),     -- ID 2
-('Aéreo'),        -- ID 3
-('Estándar'),     -- ID 4
-('Frágil'),       -- ID 5
-('Extra Frágil'); -- ID 6
+  KEY fk_paquete_vehiculo (id_vehiculo),
+  KEY fk_paquete_categoria (id_categoria),
+  CONSTRAINT fk_paquete_categoria FOREIGN KEY (id_categoria) REFERENCES categoria (id_categoria),
+  CONSTRAINT fk_paquete_vehiculo FOREIGN KEY (id_vehiculo) REFERENCES vehiculo (id_vehiculo)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- =============================================
--- 2. TABLA: vehiculo (Usa categorías 1, 2 y 3)
--- =============================================
-INSERT INTO vehiculo (modelo, nro_identificacion, estado, id_categoria) VALUES 
-('Trailer Volvo FH', 'VIN-TR-001-XYZAB', 'Disponible', 1), -- Terrestre
-('Buque Portacontenedores', 'VIN-MA-002-BCDEF', 'En Alta Mar', 2), -- Marítimo
-('Avión Boeing 777F', 'VIN-AE-003-GHIJK', 'Mantenimiento', 3), -- Aéreo
-('Furgoneta Delivery', 'VIN-TR-004-LMNOP', 'En Ruta', 1), -- Terrestre
-('Helicóptero de Carga', 'VIN-AE-005-QRSTU', 'Disponible', 3); -- Aéreo
+DELIMITER ;;
+CREATE PROCEDURE P_ELIMINAR_VEH_COMPLETO(IN p_id_vehiculo INT)
+BEGIN
+    UPDATE paquete 
+    SET id_vehiculo = NULL 
+    WHERE id_vehiculo = p_id_vehiculo 
+      AND estado NOT IN ('Remitido', 'Almacenado');
 
--- =============================================
--- 3. TABLA: paquete (Uso de categorías 4, 5 y 6)
--- =============================================
-INSERT INTO paquete (peso, destino, contenido, estado, id_vehiculo, id_categoria) VALUES 
-('1200 kg', 'Puerto del Callao', 'Maquinaria Pesada', 'Enviado', 2, 4), -- Estándar
-('5 kg', 'Miraflores, Lima', 'Vajilla de Cristal', 'En Ruta', 4, 5),   -- Frágil
-('0.8 kg', 'Clínica Delgado', 'Lentes de Laboratorio', 'Urgente', 5, 6), -- Extra Frágil
-('50 kg', 'Almacén Central', 'Repuestos de Motor', 'Pendiente', 1, 4), -- Estándar
-('2 kg', 'Museo de Arte', 'Óleo sobre Lienzo', 'En Tránsito', 3, 5);   -- Frágil
+    DELETE FROM vehiculo 
+    WHERE id_vehiculo = p_id_vehiculo
+    AND estado = 'Descontinuado';
+
+    IF ROW_COUNT() > 0 THEN
+        SELECT 'Vehículo eliminado y paquetes desvinculados' AS resultado;
+    ELSE
+        SELECT 'No se pudo eliminar: El vehículo no existe o no está "Descontinuado"' AS resultado;
+    END IF;
+END ;;
+
+CREATE PROCEDURE P_V_DATOS_GENERALS()
+BEGIN
+    SELECT v.modelo, v.nro_identificacion, v.estado, g.nombre AS nombre_categoria
+    FROM vehiculo AS v 
+    INNER JOIN categoria AS g ON v.id_categoria = g.id_categoria;
+END ;;
+
+CREATE PROCEDURE P_V_DISPONIBLE()
+BEGIN
+    SELECT v.modelo, v.nro_identificacion, g.nombre
+    FROM vehiculo AS v 
+    INNER JOIN categoria AS g ON v.id_categoria = g.id_categoria;
+END ;;
+DELIMITER ;
+
+INSERT vehiculo (id_vehiculo, modelo, nro_identificacion, estado, id_categoria) VALUES 
+(1, 'Camión Volvo FH16', 'VIN-99234-X1', 'Disponible', 1),
+(2, 'Furgoneta Mercedes Sprinter', 'VIN-11223-Y2', 'Entregando', 1),
+(3, 'Buque de Carga Maersk', 'VIN-44556-Z3', 'Descontinuado', 2),
+(4, 'Avión Airbus A330F', 'VIN-77889-W4', 'Disponible', 3),
+(5, 'Remolque Utilitario', 'VIN-00112-Q5', 'Descontinuado', 1);
+
+INSERT paquete (id_paquete, peso, destino, contenido, estado, id_vehiculo, id_categoria) VALUES 
+(1, '45 kg', 'Almacén Norte', 'Componentes Electrónicos', 'Almacenado', NULL, 4),
+(2, '120 kg', 'Puerto Principal', 'Repuestos Industriales', 'Remitido', 2, 4),
+(3, '5 kg', 'Centro Médico Junín', 'Insumos Hospitalarios', 'Almacenado', NULL, 5),
+(4, '500 kg', 'Zona Franca', 'Material de Construcción', 'Remitido', 1, 4),
+(5, '2 kg', 'Galería Central', 'Esculturas de Cerámica', 'Almacenado', NULL, 6);
