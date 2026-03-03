@@ -35,5 +35,13 @@ export default class BaseRepository {
         );
         return result;
     }
+
+    async update(id, data) {
+        const [result] = await this.pool.query(
+            `UPDATE ${this.table} SET ? WHERE ${this.primaryKey} = ?`, 
+            [data, id]
+        );
+        return result;
+    }
 }
 

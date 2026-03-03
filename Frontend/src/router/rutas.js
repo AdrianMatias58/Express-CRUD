@@ -8,7 +8,7 @@ const ruter = createRouter({
         {
             path: "/",
             name: "Home",
-            component: Home
+            component: Index
         },
         {
             path: "/vehiculos",

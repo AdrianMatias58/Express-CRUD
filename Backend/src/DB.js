@@ -5,7 +5,7 @@ export const cnPool = createPool({
     user:'root',
     password:'',
     port:3306,
-    database:'dbvehiculo',
+    database:'dbsystemaentrega',
     waitForConnections: true,
     connectionLimit:20,
     idleTimeout: 30000
