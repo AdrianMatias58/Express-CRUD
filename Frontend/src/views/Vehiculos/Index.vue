@@ -29,8 +29,6 @@ const cambiarEstado = async (vehiculo) => {
   }
 };
 const eliminarVehiculo = async (v) => {
-  console.log(v);
-  
   if (confirm("¿Estás seguro de eliminar este vehículo?")) {
     try {
       await VehiculsoServ.deleteVehiculo(v.id);

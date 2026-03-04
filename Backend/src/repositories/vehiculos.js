@@ -37,7 +37,7 @@ export default class VehiculoRepository extends Base {
     async delete(id){
         try{
             const [res] = await this.pool.query(`CALL P_ELIMINAR_VEHICULO_COMPLETO (?)`, [id]);
-            return [res]
+            return res
         }catch(error){
             throw error;
         }
