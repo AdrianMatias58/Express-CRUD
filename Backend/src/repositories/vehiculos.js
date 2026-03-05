@@ -18,7 +18,7 @@ export default class VehiculoRepository extends Base {
                 const [result] = await this.pool.query(
                 `UPDATE ${this.table} SET estado = ? WHERE ${this.primaryKey} = ?`,
                 [estado, id]);
-                return result
+                return result.affectedRows > 0; 
             }
         }catch(error){
             throw error;
@@ -36,8 +36,9 @@ export default class VehiculoRepository extends Base {
     }
     async delete(id){
         try{
-            const [res] = await this.pool.query(`CALL P_ELIMINAR_VEHICULO_COMPLETO (?)`, [id]);
-            return res
+            const [res] = await this.pool.query(`CALL P_ELIMINAR_VEH_COMPLETO(?)`, [id]);
+            const row = res[0][0];
+            return row ? row.filas_afectadas : 0;
         }catch(error){
             throw error;
         }

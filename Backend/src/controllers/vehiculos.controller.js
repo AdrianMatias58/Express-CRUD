@@ -40,7 +40,6 @@ ControllVehiculo.updateEstadoVehiculo = async (req, res) => {
         message: "No se pudo actualizar: El vehículo no existe o el estado ya era el solicitado",
       });
     }
-      
     return res.status(200).json({
       message: "Estado del vehículo actualizado correctamente",
     });
@@ -53,15 +52,17 @@ ControllVehiculo.updateEstadoVehiculo = async (req, res) => {
 ControllVehiculo.deleteVehiculos = async (req, res) => {
   try {
     const { id } = req.params;
-    const resultado = await VehiculoR.delete(id);
-    
-    if (resultado.affectedRows < 1) { 
-      return res.status(404).json({ error: "Vehículo no encontrado" });
+    if (!id) return res.status(400).json({ error: "Falta el ID del vehiculo" });
+    const result = await VehiculoR.delete(id);
+    if (result === 0) {
+      return res.status(404).json({ message: "No se encontró el vehículo o no esta descontinuado" });
     }
-    return res.status(200).json({ message: "Vehículo eliminado correctamente" });
+    return res.status(200).json({ 
+        message: "Vehiculo eliminado correctamente" 
+      });
   } catch (error) {
-    console.error("ERROR REAL:", error);
-    return res.status(500).json({ error: "Error al eliminar veiculo" });
+    console.error("Error en el catch:", error);
+    return res.status(500).json({ error: "Error interno" });
   }
 };
 
