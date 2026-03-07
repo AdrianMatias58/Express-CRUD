@@ -9,7 +9,6 @@ export default class VehiculoRepository extends Base {
         const [row] = await this.pool.query(`CALL P_V_DATOS_GENERALS()`)
         return row[0]
     }
-    
     async updateEstado(id, estado) {
         try{
             //verificar existencia del vehiculo
@@ -43,5 +42,8 @@ export default class VehiculoRepository extends Base {
             throw error;
         }
     }
-    
+    async Last_V_Estado(estado){
+        const [row] = await this.pool.query(`CALL P_V_LAST_ESTADO(?)`, [estado])
+        return row[0]
+    }
 }

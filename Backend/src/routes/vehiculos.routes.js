@@ -5,6 +5,8 @@ const route = Router()
 route.get('/api/vehiculo', CtrllVehiculo.getVehiculos)
 //Obtener vehiculos disponibles
 route.get('/api/vehiculo/disponible', CtrllVehiculo.getVehiculosDisponible)
+//optener segun estado
+route.get('/api/vehiculo/estado/:estado', CtrllVehiculo.Vehiculo_Estado)
 //agregar vehiculo
 route.post('/api/vehiculo', CtrllVehiculo.createVehiculos)
 //Eliminar vehiculo

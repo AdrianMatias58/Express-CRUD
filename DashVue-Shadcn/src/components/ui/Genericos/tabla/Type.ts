@@ -1,4 +1,5 @@
 export interface ColumnConfig<T> {
   key: keyof T | 'actions'; 
-  header: string;           
+  header: string;     
+  class?:string;      
 }

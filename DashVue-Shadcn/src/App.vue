@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import HeaderGenerico from './components/ui/Genericos/tabla/HeaderGenerico.vue';
+import HeaderGenerico from './components/ui/Genericos/HeaderGenerico.vue';
 
 </script>
 

@@ -6,6 +6,6 @@ export default interface InterVehiculo{
     id_categoria? : number;
     nombre_categoria?: string;
     created_at?: string | Date | null; 
-    updated_at?: string| Date|null;
+    fecha_actualizacion?: string| Date|null;
 
 }

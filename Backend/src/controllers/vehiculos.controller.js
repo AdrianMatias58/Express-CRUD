@@ -14,7 +14,31 @@ ControllVehiculo.getVehiculos = async (req, res) => {
     return res.status(500).json({ error: "Error en el servidor" });
   }
 };
-
+ControllVehiculo.getVehiculos = async (req, res) => {
+  try {
+    const vehiculos = await VehiculoR.getAll();
+    // Agregamos RETURN para que no intente ejecutar el 200 después del 404
+    if (!vehiculos || vehiculos.length === 0) {
+      return res.status(404).json({ message: "No se encontro ningun vehiculo" });
+    }
+    return res.status(200).json(vehiculos);
+  } catch (error) {
+    return res.status(500).json({ error: "Error en el servidor" });
+  }
+};
+ControllVehiculo.Vehiculo_Estado = async (req, res) => {
+  try {
+    const estado = req.params.estado
+    if (!estado) 
+      return res.status(400).json({message : "Error flata el parametro de estado"})
+    const vehiculo = await VehiculoR.Last_V_Estado(estado)
+    if (!vehiculo) 
+      return res.status(400).json({message : "Error, vehiculo no encontrado"})
+    return res.status(200).json(vehiculo);
+  } catch (error) {
+    return res.status(500).json({ error: "Error en el servidor" });
+  }
+};
 ControllVehiculo.createVehiculos = async (req, res) => {
   try {
     const nuevoId = await VehiculoR.create(req.body); 

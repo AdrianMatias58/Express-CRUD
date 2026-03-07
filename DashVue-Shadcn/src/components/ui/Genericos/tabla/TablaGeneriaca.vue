@@ -19,15 +19,21 @@ defineProps<{
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead v-for="col in columns" :key="String(col.key)">
+          <TableHead 
+          v-for="col in columns" 
+          :key="String(col.key)"
+          :class="col.class">
             {{ col.header }}
           </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         <template v-if="data.length">
-          <TableRow v-for="(item, index) in data" :key="index">
-            <TableCell v-for="col in columns" :key="String(col.key)">
+          <TableRow 
+          v-for="(item, index) in data" :key="index">
+            <TableCell v-for="col in columns" 
+            :key="String(col.key)" 
+            :class="col.class">
               <slot :name="`cell-${String(col.key)}`" :row="item">
                 {{ item[col.key] }}
               </slot>

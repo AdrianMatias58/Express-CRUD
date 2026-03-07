@@ -20,5 +20,9 @@ export const VehiculoServ = {
     ActualVehiculo : async (id: number, datos : Partial<Omit<InterVehiculo, 'id_vehiculo'>>) =>{
         const {data} = await Api.patch<InterVehiculo>(`/vehiculo/estado/${id}`,datos);
         return data;
+    },
+    VehiculoEstado: async(estado : string)=>{
+        const {data} = await Api.get<InterVehiculo[]>(`/vehiculo/estado/${estado}`);
+        return data;
     }
 };
