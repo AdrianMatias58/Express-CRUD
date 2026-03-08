@@ -66,7 +66,6 @@ ControllVehiculo.createVehiculos = async (req, res) => {
     // Recuerda: nuevoId ya es el insertId que devolvió tu Repo
     return res.status(201).json({ 
       message: "Vehiculo creado correctamente",
-      id: nuevoId
     });
   } catch (error) {
     console.error("ERROR REAL:", error);
