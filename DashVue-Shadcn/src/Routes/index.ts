@@ -5,6 +5,11 @@ const routes : RouteRecordRaw[] =[
         path: '/',
         name: 'Inicio-Vehiculo',
         component: () => import ('../views/Vehiculos/Index.vue') 
+    },
+    {
+        path: '/vehiculo-crear',
+        name: 'formulario vehiculo',
+        component: () => import ('../views/Vehiculos/create.vue') 
     }
 ]
 const router = createRouter({

@@ -14,18 +14,39 @@ ControllVehiculo.getVehiculos = async (req, res) => {
     return res.status(500).json({ error: "Error en el servidor" });
   }
 };
-ControllVehiculo.getVehiculos = async (req, res) => {
-  try {
-    const vehiculos = await VehiculoR.getAll();
-    // Agregamos RETURN para que no intente ejecutar el 200 después del 404
-    if (!vehiculos || vehiculos.length === 0) {
+ControllVehiculo.Vehiculo_Cant_Stdo = async(req, res)=>{
+  try{
+    const CanStdo = await VehiculoR.Can_V_Stdo();
+    if (!CanStdo || CanStdo.length === 0) {
       return res.status(404).json({ message: "No se encontro ningun vehiculo" });
     }
-    return res.status(200).json(vehiculos);
-  } catch (error) {
+    return res.status(200).json(CanStdo);
+  }catch(error){
     return res.status(500).json({ error: "Error en el servidor" });
   }
-};
+}
+ControllVehiculo.UlitmoIngresado = async(req, res)=>{
+  try{
+    const vehiculo = await VehiculoR.Ultimo_Ingresado();
+    if (!vehiculo || vehiculo.length === 0) {
+      return res.status(404).json({ message: "No se encontro ningun vehiculo" });
+    }
+    return res.status(200).json(vehiculo);
+  }catch(error){
+    return res.status(500).json({ error: "Error en el servidor" });
+  }
+}
+ControllVehiculo.UlitmoActulizado = async(req, res)=>{
+  try{
+    const vehiculo = await VehiculoR.Ultimo_Actualizado();
+    if (!vehiculo || vehiculo.length === 0) {
+      return res.status(404).json({ message: "No se encontro ningun vehiculo" });
+    }
+    return res.status(200).json(vehiculo);
+  }catch(error){
+    return res.status(500).json({ error: "Error en el servidor" });
+  }
+}
 ControllVehiculo.Vehiculo_Estado = async (req, res) => {
   try {
     const estado = req.params.estado

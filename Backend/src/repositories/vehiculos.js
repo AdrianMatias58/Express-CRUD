@@ -46,4 +46,16 @@ export default class VehiculoRepository extends Base {
         const [row] = await this.pool.query(`CALL P_V_LAST_ESTADO(?)`, [estado])
         return row[0]
     }
+    async Can_V_Stdo (){
+        const [row] = await this.pool.query(`CALL P_V_CANT_STDO`)
+        return row[0]
+    }
+    async Ultimo_Ingresado (){
+        const [row] = await this.pool.query(`CALL P_V_RECIENTE`)
+        return row[0]
+    }
+    async Ultimo_Actualizado (){
+        const [row] = await this.pool.query(`CALL P_V_ACTULIZADO`)
+        return row[0]
+    }
 }

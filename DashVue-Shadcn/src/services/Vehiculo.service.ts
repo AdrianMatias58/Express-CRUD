@@ -1,6 +1,6 @@
 import { Api } from "./axios.ts";
 import type InterVehiculo from "../Interfaces/InterVehiculo.ts";
-
+import type InterVeiEstdo from "../Interfaces/InterVehEstdo.ts";
 export const VehiculoServ = {
     AllVehiculos: async()=>{
         const {data} = await Api.get<InterVehiculo[]>("/vehiculo");
@@ -24,5 +24,17 @@ export const VehiculoServ = {
     VehiculoEstado: async(estado : string)=>{
         const {data} = await Api.get<InterVehiculo[]>(`/vehiculo/estado/${estado}`);
         return data;
+    },
+    CantiVEstado : async()=>{
+        const {data} = await Api.get<InterVeiEstdo[]>("/vehiculo/Cantidad/Estado")
+        return data
+    },
+    UltimoIngre : async () => {
+        const {data} = await Api.get<InterVehiculo[]>("/vehiculo/UltIngrezado")
+        return data
+    },
+    UltimoActual : async () => {
+        const {data} = await Api.get<InterVehiculo[]>("/vehiculo/UltActulizado")
+        return data
     }
 };
